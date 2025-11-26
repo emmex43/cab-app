@@ -1,0 +1,76 @@
+        body{
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            /* background-color: #F6F6F6; */
+            padding: auto;
+            margin: 0;
+            font-size: inherit;
+            font-weight: inherit;
+            size: 100%;
+            height: 100%;
+            width: 100%;
+            cursor: default;
+        }
+
+        .bg-purple{
+            /* background-color: #8C1C64; */
+            background: linear-gradient(135deg, #8C1C64 0%, #B3257F 100%, #5A1041 100%);
+            color: #F6F6F6;
+        }
+        
+        
+        .btn-purple{
+            /* background-color: #8C1C64; */
+            background: linear-gradient(135deg, #8C1C64 0%, #B3257F 100%, #5A1041 100%);
+            color: #F6F6F6;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-purple:hover {
+          /* background-color: #8C1C64; */
+          background: linear-gradient(135deg, #8C1C64 0%, #B3257F 100%, #5A1041 100%);
+          color: #F6F6F6;
+          transform: translateY(-2px);
+        }
+
+        .bg-yellow{
+            /* background-color: #FFC93C; */
+            background: linear-gradient(135deg, #FFC93C 0%, #FFE27A 100%);
+            color: #1C1C1C;
+        }
+
+        .btn-yellow{
+            /* background-color: #FFC93C; */
+            background: linear-gradient(135deg, #FFC93C 0%, #FFE27A 100%);
+            color: #1C1C1C;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-yellow:hover {
+          /* background-color: #FFC93C; */
+          background: linear-gradient(135deg, #FFC93C 0%, #FFE27A 100%);
+          color: #1C1C1C;
+          transform: translateY(-2px);
+        }
+        .nav-link {
+          margin: 0 10px;
+          font-weight: 500;
+        }
+
+        .nav-link:hover {
+          color: #FFC93C !important;
+        }
+
+        /* .main{
+          background-image: url("assets/images/map2.png");
+          width: 100%;
+          height: 50%;
+        } */
+        .front:hover{
+          transform: translateY(-2px);
+        }

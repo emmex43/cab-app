@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book A Ride</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
+  <link rel="stylesheet" href="/index.css">
+</head>
+
+<body>
+  <!-- The Navbar Section -->
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-purple">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <span class=""><b>UNIBEN Mobility</b></span><br>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link text-white" href="Home.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="BookRide.html">Book Ride</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="driverhub.html">Driver's Hub</a></li>
+        </ul>
+        <a href="Login.html" class="btn btn-yellow ms-lg-3">Student Login</a>
+      </div>
+    </div>
+  </nav id="home"><br><br>
+
+  <!-- Services Section -->
+  <section class="py-5 bg-light">
+    <div class="">
+      <h2 class="h3 mb-3 fw-bold text-center">Book Your Ride</h2>
+      <div class="row g-4" style="justify-content: center; padding: 5%;">
+        <div class="col-md-4">
+          <div class="p-4 bg-white shadow-sm rounded-3">
+            <form action="form-group">
+              <h5 class="fw-bold">Book Cab</h5>
+              <input type="text" class="form-control" placeholder="Get Your Location"><br>
+              <button class="w-100 btn btn-md btn-purple" type="submit">Process</button>
+            </form>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="p-4 bg-white shadow-sm rounded-3">
+            <form action="form-group">
+              <h5 class="fw-bold">Book Shuttle</h5>
+              <select class="form-select" name="Destination" id="Destination" required>
+                <option selected disabled value="">Choose Destination</option>
+                <option value="Main Gate/Small Gate">Back Gate to Main Gate/Small Gate; <b id="Price">Price: #200</b>
+                </option>
+                <option value="New Benin(NB)">Small Gate to New Benin(NB); <b id="Price">Price: #300</b></option>
+                <option value="Ring Road(RR)">Small Gate to Ring Road(RR); <b id="Price">Price: #300</b></option>
+                <option value="Back Gate">Main Gate/Small Gate to Back Gate; <b id="Price">Price: #200</b></option>
+              </select>
+              <br>
+              <button class="w-100 btn btn-md btn-purple" type="submit">Create Ticket</button>
+              <!-- I wanted to add a print function but since there is no payment integration yet there is no need, -->
+              <!-- When you decide on that We will move from there. -->
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </section>
+
+
+  <!-- Footer Section -->
+  <!-- Pls Emmex if you want to configure the footer, do so here -->
+  <footer class="bg-purple d-flex flex-column flex-md-row gap-5 " style="padding: 3%;">
+    <div>
+      <h1 class="h4 mb-3 fw-bold">UNIBEN Mobility Suite</h1>
+      <p> Safe, reliable transportation for UNIBEN students</p>
+      <p><a href="https//efemichael-712.web.app" class="text-white nav-link" style="text-decoration: none;"> By Michael
+          Efe © 2025 </a></p>
+    </div>
+
+    <div>
+      <h1 class="h5 mb-3 fw-bold">Reachout to us for more enquries.</h1>
+      <p>
+        <a href="tel:+2347041805763" class="text-white nav-link" style="text-decoration: none;"><b>Contact:</b> +234 704
+          180 5763</a>
+        <a href="mailto:emmexanimation@gmail.com" class="text-white nav-link"
+          style="text-decoration: none;"><b>Email:</b> emmexanimation@gmail.com</a>
+      </p>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+    crossorigin="anonymous"></script>
+  <!-- REPLACE THE ENTIRE SCRIPT IN BookRide.html WITH THIS -->
+  <script>
+    // Check if user is logged in
+    document.addEventListener('DOMContentLoaded', function () {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('Please login first!');
+        window.location.href = 'Login.html';
+        return;
+      }
+      console.log('User is logged in, token found');
+    });
+
+    // Cab Booking Form - FIXED
+    document.querySelectorAll('form')[0].addEventListener('submit', async function (e) {
+      e.preventDefault();
+      console.log('Cab booking form submitted');
+
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('Please login first!');
+        window.location.href = 'Login.html';
+        return;
+      }
+
+      const pickupLocation = document.querySelector('input[placeholder="Get Your Location"]').value;
+
+      if (!pickupLocation) {
+        alert('Please enter your location');
+        return;
+      }
+
+      const formData = {
+        ride_type: 'Cab',
+        pickup_location: pickupLocation,
+        destination: 'Campus Route'
+      };
+
+      console.log('Sending cab booking:', formData);
+
+      try {
+        const response = await fetch('/api/rides/book', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(formData)
+        });
+
+        const data = await response.json();
+        console.log('Cab booking response:', data);
+
+        if (response.ok) {
+          alert('Cab ride booked successfully! Price: ₦200');
+          // Clear form
+          document.querySelector('input[placeholder="Get Your Location"]').value = '';
+        } else {
+          alert('Error: ' + (data.error || 'Unknown error'));
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Network error. Please try again.');
+      }
+    });
+
+    // Shuttle Booking Form - FIXED
+    document.querySelectorAll('form')[1].addEventListener('submit', async function (e) {
+      e.preventDefault();
+      console.log('Shuttle booking form submitted');
+
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('Please login first!');
+        window.location.href = 'Login.html';
+        return;
+      }
+
+      const destinationSelect = document.getElementById('Destination');
+      const destination = destinationSelect ? destinationSelect.value : null;
+
+      if (!destination) {
+        alert('Please choose a destination');
+        return;
+      }
+
+      // Price mapping
+      const prices = {
+        'Main Gate/Small Gate': 200,
+        'New Benin(NB)': 300,
+        'Ring Road(RR)': 300,
+        'Back Gate': 200
+      };
+
+      const formData = {
+        ride_type: 'Shuttle',
+        destination: destination,
+        pickup_location: 'UNIBEN Campus'
+      };
+
+      console.log('Sending shuttle booking:', formData);
+
+      try {
+        const response = await fetch('/api/rides/book', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(formData)
+        });
+
+        const data = await response.json();
+        console.log('Shuttle booking response:', data);
+
+        if (response.ok) {
+          const price = prices[destination] || 200;
+          alert(`Shuttle ticket created successfully! Price: ₦${price}`);
+          // Clear form
+          if (destinationSelect) destinationSelect.value = '';
+        } else {
+          alert('Error: ' + (data.error || 'Unknown error'));
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Network error. Please try again.');
+      }
+    });
+
+  </script>
+</body>
+
+</html>
