@@ -2,11 +2,14 @@ from flask import Flask, render_template, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
+from flask_socketio import SocketIO
 import os
 from config import Config
+from app.routes.agent import agent_bp
 
 db = SQLAlchemy()
 jwt = JWTManager()
+socketio = SocketIO()
 
 def create_app():
     app = Flask(__name__, 
@@ -17,6 +20,7 @@ def create_app():
     # Initialize extensions
     db.init_app(app)
     jwt.init_app(app)
+    socketio.init_app(app, cors_allowed_origins="*")
     CORS(app)
     
     # Create upload directories
@@ -28,7 +32,8 @@ def create_app():
     from app.routes.rides import rides_bp
     from app.routes.drivers import drivers_bp
     from app.routes.forum import forum_bp
-    
+    app.register_blueprint(agent_bp, url_prefix='/api/agent')
+
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(rides_bp, url_prefix='/api/rides')
     app.register_blueprint(drivers_bp, url_prefix='/api/drivers')

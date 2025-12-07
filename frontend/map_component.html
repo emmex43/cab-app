@@ -1,0 +1,52 @@
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+<script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+
+<style>
+    #map {
+        height: 300px;
+        width: 100%;
+        border-radius: 15px;
+        z-index: 1;
+        margin-bottom: 20px;
+        border: 2px solid #8C1C64; /* UNIBEN Purple */
+    }
+    .leaflet-routing-container { display: none; } /* Hide text directions */
+</style>
+
+<div id="map"></div>
+
+<script>
+    let map, routingControl;
+
+    function initLeafletMap() {
+        // Prevent re-initializing if map already exists
+        if (map) return;
+
+        // Center on UNIBEN
+        map = L.map('map').setView([6.3392, 5.6176], 14);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        // Draw "Visual" Route (Main Gate -> Hall 2)
+        routingControl = L.Routing.control({
+            waypoints: [
+                L.latLng(6.342, 5.618), // Main Gate
+                L.latLng(6.335, 5.620)  // Hall 2
+            ],
+            routeWhileDragging: false,
+            show: false,
+            addWaypoints: false,
+            draggableWaypoints: false,
+            fitSelectedRoutes: true,
+            lineOptions: { styles: [{color: '#8C1C64', opacity: 0.7, weight: 5}] }
+        }).addTo(map);
+    }
+
+    // Auto-load map when this component is included
+    document.addEventListener('DOMContentLoaded', initLeafletMap);
+</script>

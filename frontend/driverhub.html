@@ -5,10 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Driver's Hub</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
     <link rel="stylesheet" href="index.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
 
     <style>
         .section {
@@ -17,20 +18,23 @@
             background-size: cover;
             background-position: center;
             width: 100%;
-            height: 380px;
+            min-height: 380px;
             justify-items: center;
-            padding: 11%;
+            padding: 5% 10%;
+        }
+
+        .request-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-left: 5px solid #FFC93C;
+            transition: all 0.3s ease;
         }
     </style>
 </head>
 
 <body>
-    <!-- The Navbar Section -->
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-purple">
         <div class="container">
-            <a class="navbar-brand" href="#">
-                <span class=""><b>UNIBEN Mobility</b></span><br>
-            </a>
+            <a class="navbar-brand" href="#"><b>UNIBEN Mobility</b></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -38,19 +42,27 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link text-white" href="Home.html">Home</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="BookRide.html">Book Ride</a></li>
+                    <li class="nav-item"><a class="nav-link text-white" href="studentforum.html">Forum</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="driverhub.html">Driver's Hub</a></li>
                 </ul>
                 <a href="Login.html" class="btn btn-yellow ms-lg-3">Student Login</a>
             </div>
         </div>
-    </nav id="home"><br><br>
+    </nav><br><br>
 
-    <!-- This is the Driver's Hub Section -->
     <section>
         <div class="section text-center">
             <h1 class="h1 mb-3 fw-bold" style="color: #FFC93C;">Driver's Hub</h1>
-            <p class="h5 mb-2 fw-normal text-white">Welcome to the Driver's Hub. Here, drivers can</p>
-            <p class="h5 mb-2 fw-normal text-white">manage their rides and view important information.</p>
+
+            <div class="container mt-3 mb-4">
+                <div id="live-requests-container">
+                    <p id="waiting-text" class="h5 mb-2 fw-normal text-white bg-dark p-2 rounded opacity-75"
+                        style="display: inline-block;">
+                        <i class="fas fa-satellite-dish fa-spin"></i> Waiting for ride requests...
+                    </p>
+                </div>
+            </div>
+
             <div class="buttons">
                 <a href="driverlogin.html" class="btn btn-purple ms-lg-3">Driver Login</a>
                 <a href="driverreg.html" class="btn btn-yellow ms-lg-3">Register as Driver</a>
@@ -58,456 +70,242 @@
         </div>
     </section><br><br><br>
 
-    <!-- This is the Discussion Forum Section -->
     <div class="dis text-center">
         <h2 class="h2 mb-3 fw-bold" style="color: #8C1C64;">Discussion Forum</h2>
         <p class="h5 mb-2 fw-normal">Share updates, ask questions, and connect with fellow drivers.</p><br>
 
-        <!-- Button to trigger modal -->
         <a href="" data-bs-toggle="modal" data-bs-target="#modalId" class="btn btn-yellow ms-lg-3">Post</a>
 
-        <!-- This is the Modal -->
-        <div class="modal fade" id="modalId" tabindex="-1" role="dialog" aria-labelledby="modalTitleId"
-            aria-hidden="true" style="padding: 5%;">
+        <div class="modal fade" id="modalId" tabindex="-1" role="dialog" aria-hidden="true" style="padding: 5%;">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalTitleId"> Make a Post</h5>
+                        <h5 class="modal-title">Make a Post</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="container-fluid">
-                            <form>
+                            <form id="postForm">
                                 <div class="mb-3">
                                     <label for="recipient-name" class="col-form-label">Title:</label>
-                                    <input type="text" class="form-control" id="recipient-name" name="title"
+                                    <input type="text" class="form-control" id="recipient-name"
                                         placeholder="Enter Post Title">
                                 </div>
                                 <div class="mb-3">
                                     <label for="message-text" class="col-form-label">Message:</label>
-                                    <textarea class="form-control" id="message-text" name="content"
+                                    <textarea class="form-control" id="message-text"
                                         placeholder="Write your post here..."></textarea>
                                 </div>
                             </form>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-purple ms-lg-3" data-bs-dismiss="modal"> Close </button>
-                        <button type="submit" class="btn btn-yellow ms-lg-3">Upload</button>
+                        <button type="button" class="btn btn-purple ms-lg-3" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-yellow ms-lg-3" onclick="createPost()">Upload</button>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- This script handles the modal functionality -->
-        <script>
-            var modalId = document.getElementById('modalId');
-
-            modalId.addEventListener('show.bs.modal', function (event) {
-                // Button that triggered the modal
-                let button = event.relatedTarget;
-                // Extract info from data-bs-* attributes
-                let recipient = button.getAttribute('data-bs-whatever');
-
-                // Use above variables to manipulate the DOM
-            });
-        </script>
-
-
     </div>
 
-    <!-- This is the Posts Section where it displays the post here  -->
+    <div id="posts-container" class="list-group" style="padding: 5% 10%;">
+        <p class="text-center text-muted">Loading posts...</p>
+    </div>
 
-    <div class="list-group"
-        style="padding-left: 10%; padding-right: 10%; padding-top: 5%; padding-bottom: 5%; border-radius: 20px;">
-        <article class="list-group-item list-group-item-action py-3" aria-current="true">
-            <div class="row g-3 align-items-center">
-                <div class="col-12 col-md-8">
-                    <h4 class="mb-1" id="display_title">New CheckPoint</h4>
-                    <p class="mb-2 text-muted" id="display_content">This is the post session ,only drivers are
-                        expected to post and students can reply post
-                        .</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <small class="text-muted">By Emmex and Michael• 2025-11-26</small>
+    <footer class="bg-purple d-flex flex-column flex-md-row gap-5 " style="padding: 3%;">
+        <div>
+            <h1 class="h4 mb-3 fw-bold">UNIBEN Mobility Suite</h1>
+            <p> Safe, reliable transportation for UNIBEN students</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        const socket = io();
+
+        // 1. SOCKET LISTENER FOR REQUESTS
+        const requestsContainer = document.getElementById('live-requests-container');
+        const waitingText = document.getElementById('waiting-text');
+
+        // --- SOUND SETUP ---
+        const requestSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+
+        // Listen for new rides
+        socket.on('new_ride_available', (data) => {
+            console.log("New ride received:", data);
+
+            // 1. PLAY SOUND
+            requestSound.play().catch(e => console.log("Audio blocked: Click page to enable."));
+
+            // 2. Hide "Waiting" text
+            if (waitingText) waitingText.style.display = 'none';
+
+            // 3. Time Logic
+            const now = new Date();
+            const actualTime = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+
+            // 4. Create Card
+            const cardId = `ride-${data.ride_id}`;
+            const cardHtml = `
+                <div class="card mb-3 mx-auto request-card text-start shadow-sm" style="max-width: 500px;" id="${cardId}">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="card-title fw-bold text-primary mb-0"><i class="fas fa-car-side"></i> ${data.type} Request</h5>
+                            <span class="badge bg-warning text-dark fs-6">₦${data.price}</span>
+                        </div>
+                        <div class="mb-3">
+                            <p class="mb-1"><strong>Student:</strong> ${data.student_name}</p>
+                            <p class="mb-1"><strong>From:</strong> ${data.pickup}</p>
+                            <p class="mb-1"><strong>To:</strong> ${data.destination}</p>
+                            <small class="text-muted">Posted at ${actualTime}</small>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button onclick="acceptLiveRide(${data.ride_id})" class="btn btn-purple btn-lg">Accept Job</button>
                         </div>
                     </div>
-                </div>
-            </div>
-        </article><br /><br />
-        <!-- Footer Section -->
-        <!-- Pls Emmex if you want to configure the footer, do so here -->
-        <footer class="bg-purple d-flex flex-column flex-md-row gap-5 " style="padding: 3%;">
-            <div>
-                <h1 class="h4 mb-3 fw-bold">UNIBEN Mobility Suite</h1>
-                <p> Safe, reliable transportation for UNIBEN students</p>
-                <p><a href="https//efemichael-712.web.app" class="text-white nav-link" style="text-decoration: none;">
-                        By
-                        Michael Efe © 2025 </a></p>
-            </div>
+                </div>`;
+            requestsContainer.insertAdjacentHTML('afterbegin', cardHtml);
+        });
 
-            <div>
-                <h1 class="h5 mb-3 fw-bold">Reachout to us for more enquries.</h1>
-                <p>
-                    <a href="tel:+2347041805763" class="text-white nav-link"
-                        style="text-decoration: none;"><b>Contact:</b>
-                        +234 704 180 5763</a>
-                    <a href="mailto:emmexanimation@gmail.com" class="text-white nav-link"
-                        style="text-decoration: none;"><b>Email:</b> emmexanimation@gmail.com</a>
-                </p>
-            </div>
-        </footer>
-
-        <!-- You can use id, class or name to target the elements in the form -->
-
-        <!-- Dont touch this script links below it is the bootstrap and js links -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
-            integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
-            crossorigin="anonymous"></script>
-
-        <!-- REPLACE THE ENTIRE SCRIPT IN driverhub.html WITH THIS -->
-        <script>
-            // Load forum posts when page loads
-            document.addEventListener('DOMContentLoaded', async function () {
-                console.log('Page loaded, loading forum posts...');
-                await loadForumPosts();
-
-                // Add event listener to post button after modal is shown
-                document.getElementById('modalId').addEventListener('shown.bs.modal', function () {
-                    const postButton = document.querySelector('.modal-footer .btn-yellow');
-                    if (postButton) {
-                        // Remove existing listeners and add new one
-                        postButton.replaceWith(postButton.cloneNode(true));
-                        document.querySelector('.modal-footer .btn-yellow').addEventListener('click', handlePostCreation);
-                    }
-                });
-            });
-
-            // Load forum posts from backend
-            async function loadForumPosts() {
-                try {
-                    console.log('Loading forum posts...');
-                    const response = await fetch('/api/forum/posts');
-                    const data = await response.json();
-                    console.log('Forum posts response:', data);
-
-                    if (response.ok) {
-                        displayPosts(data.posts || []);
-                    } else {
-                        console.error('Error loading posts:', data.error);
-                    }
-                } catch (error) {
-                    console.error('Error loading posts:', error);
-                }
+        // 2. SOCKET LISTENER FOR DELETING POSTS (Real-time removal)
+        socket.on('delete_forum_post', (data) => {
+            const el = document.getElementById(`post-${data.id}`);
+            if (el) {
+                el.style.opacity = '0';
+                setTimeout(() => el.remove(), 500); // Smooth fade out
             }
+        });
 
-            // Display posts in the forum
-            function displayPosts(posts) {
-                const postsContainer = document.querySelector('.list-group');
-                if (!postsContainer) {
-                    console.error('Posts container not found!');
-                    return;
-                }
+        // 3. LOAD POSTS + DELETE BUTTON LOGIC
+        document.addEventListener('DOMContentLoaded', loadForumPosts);
 
-                console.log('Displaying posts:', posts);
-
-                // Clear existing posts but keep the first one as template
-                const firstPost = postsContainer.querySelector('.list-group-item');
-                postsContainer.innerHTML = '';
-                if (firstPost) {
-                    postsContainer.appendChild(firstPost);
-                }
-
-                // Get current user info
+        async function loadForumPosts() {
+            try {
+                const response = await fetch('/api/forum/posts');
+                const data = await response.json();
+                const container = document.getElementById('posts-container');
                 const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
-                const currentUserId = currentUser.id;
-                const isDriver = currentUser.is_driver;
 
-                // Add new posts
-                if (posts && posts.length > 0) {
-                    posts.forEach(post => {
-                        const postElement = document.createElement('article');
-                        postElement.className = 'list-group-item list-group-item-action py-3';
-                        postElement.innerHTML = `
-                <div class="row g-3 align-items-center">
-                    <div class="col-12 col-md-8">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <h4 class="mb-1">${post.title || 'No Title'}</h4>
-                            ${post.author_is_driver && isDriver ?
-                                `<button class="btn btn-sm btn-outline-danger delete-post" data-post-id="${post.id}">Delete</button>` :
-                                ''}
-                        </div>
-                        <p class="mb-2 text-muted">${post.content || 'No Content'}</p>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div>
-                                <small class="text-muted">By ${post.author_name || 'Unknown'} • ${new Date(post.created_at).toLocaleDateString()}</small>
-                            </div>
-                        </div>
-                        
-                        <!-- Comments Section -->
-                        <div class="comments-section mt-3">
-                            <h6 class="mb-2">Comments (${post.comments ? post.comments.length : 0}):</h6>
-                            <div class="comments-list mb-3">
-                                ${post.comments && post.comments.length > 0 ?
-                                post.comments.map(comment => `
-                                        <div class="comment card mb-2">
-                                            <div class="card-body py-2">
-                                                <div class="d-flex justify-content-between">
-                                                    <p class="mb-1">${comment.content}</p>
-                                                    ${comment.author_name === currentUser.fullname ?
-                                        `<button class="btn btn-sm btn-outline-danger delete-comment" data-comment-id="${comment.id}">×</button>` :
-                                        ''}
-                                                </div>
-                                                <small class="text-muted">
-                                                    By ${comment.author_name} 
-                                                    ${comment.author_is_driver ? '(Driver)' : '(Student)'} 
-                                                    • ${new Date(comment.created_at).toLocaleDateString()}
-                                                </small>
-                                            </div>
-                                        </div>
-                                    `).join('') :
-                                '<p class="text-muted">No comments yet.</p>'
-                            }
-                            </div>
-                            
-                            <!-- Add Comment Form -->
-                            <div class="add-comment-form">
-                                <div class="input-group">
-                                    <input type="text" class="form-control comment-input" placeholder="Add a comment..." data-post-id="${post.id}">
-                                    <button class="btn btn-purple add-comment-btn" data-post-id="${post.id}">Comment</button>
+                if (response.ok && data.posts.length > 0) {
+                    container.innerHTML = '';
+                    data.posts.forEach(post => {
+
+                        // ONLY SHOW DELETE BUTTON IF YOU ARE THE OWNER
+                        let deleteBtn = '';
+                        if (currentUser.fullname === post.author_name) {
+                            deleteBtn = `
+                                <div class="mt-2 text-end">
+                                    <button class="btn btn-sm btn-outline-danger" onclick="deletePost(${post.id})">
+                                        <i class="fas fa-trash"></i> Delete Post
+                                    </button>
                                 </div>
+                            `;
+                        }
+
+                        // Comments (Read Only)
+                        let commentsHtml = '';
+                        if (post.comments && post.comments.length > 0) {
+                            post.comments.forEach(comment => {
+                                commentsHtml += `
+                                    <div class="border-start border-3 ps-2 mb-2 mt-2">
+                                        <small class="fw-bold">${comment.author_name}</small>
+                                        <p class="mb-0 small">${comment.content}</p>
+                                    </div>`;
+                            });
+                        } else {
+                            commentsHtml = '<p class="text-muted small">No replies yet.</p>';
+                        }
+
+                        const postHtml = `
+                        <article class="list-group-item list-group-item-action py-3 mb-3 border rounded shadow-sm" id="post-${post.id}">
+                            <div class="d-flex justify-content-between">
+                                <h5 class="mb-1 fw-bold text-purple">${post.title}</h5>
+                                <small class="text-muted">${post.created_at}</small>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-                        postsContainer.appendChild(postElement);
-                    });
+                            <p class="mb-2">${post.content}</p>
+                            <small class="text-muted mb-3 d-block">By Driver ${post.author_name}</small>
+                            
+                            ${deleteBtn} <div class="bg-light p-2 rounded mt-3">
+                                <h6 class="small fw-bold">Replies:</h6>
+                                ${commentsHtml}
+                            </div>
+                        </article>`;
 
-                    // Add event listeners for delete buttons and comment buttons
-                    addPostEventListeners();
+                        container.insertAdjacentHTML('beforeend', postHtml);
+                    });
+                } else {
+                    container.innerHTML = '<p class="text-center">No posts yet.</p>';
                 }
-            }
+            } catch (error) { console.error("Error loading posts:", error); }
+        }
 
-            // Add event listeners for dynamic elements
-            function addPostEventListeners() {
-                // Delete post buttons
-                document.querySelectorAll('.delete-post').forEach(button => {
-                    button.addEventListener('click', function () {
-                        const postId = this.getAttribute('data-post-id');
-                        deletePost(postId);
-                    });
+        // 4. CREATE POST FUNCTION
+        async function createPost() {
+            const token = localStorage.getItem('token');
+            if (!token) { alert('Please login as a driver.'); window.location.href = 'driverlogin.html'; return; }
+
+            const title = document.getElementById('recipient-name').value;
+            const content = document.getElementById('message-text').value;
+
+            if (!title || !content) { alert("Please fill in both Title and Message."); return; }
+
+            try {
+                const response = await fetch('/api/forum/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ title, content })
                 });
 
-                // Add comment buttons
-                document.querySelectorAll('.add-comment-btn').forEach(button => {
-                    button.addEventListener('click', function () {
-                        const postId = this.getAttribute('data-post-id');
-                        addComment(postId);
-                    });
+                if (response.ok) {
+                    alert("Post created!");
+                    bootstrap.Modal.getInstance(document.getElementById('modalId')).hide();
+                    document.getElementById('recipient-name').value = '';
+                    document.getElementById('message-text').value = '';
+                    loadForumPosts();
+                } else {
+                    const d = await response.json();
+                    alert("Error: " + (d.error || "Failed"));
+                }
+            } catch (error) { console.error(error); }
+        }
+
+        // 5. DELETE POST FUNCTION
+        async function deletePost(postId) {
+            if (!confirm("Are you sure you want to delete this post?")) return;
+
+            const token = localStorage.getItem('token');
+            try {
+                const response = await fetch(`/api/forum/posts/${postId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
                 });
 
-                // Comment input enter key
-                document.querySelectorAll('.comment-input').forEach(input => {
-                    input.addEventListener('keypress', function (e) {
-                        if (e.key === 'Enter') {
-                            const postId = this.getAttribute('data-post-id');
-                            addComment(postId);
-                        }
-                    });
+                if (response.ok) {
+                    // Success! Socket.io will handle removing the UI element
+                    console.log("Deleted successfully");
+                } else {
+                    alert("Error deleting post.");
+                }
+            } catch (error) { console.error(error); }
+        }
+
+        // 6. ACCEPT RIDE FUNCTION
+        async function acceptLiveRide(rideId) {
+            const token = localStorage.getItem('token');
+            if (!token) { alert("Please login first!"); return; }
+            try {
+                const res = await fetch(`/api/drivers/accept-ride/${rideId}`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` }
                 });
-
-                // Delete comment buttons
-                document.querySelectorAll('.delete-comment').forEach(button => {
-                    button.addEventListener('click', function () {
-                        const commentId = this.getAttribute('data-comment-id');
-                        deleteComment(commentId);
-                    });
-                });
-            }
-
-            // Handle post creation form
-            async function handlePostCreation() {
-                console.log('Post creation triggered');
-
-                const token = localStorage.getItem('token');
-                if (!token) {
-                    alert('Please login as a driver to post');
-                    return;
+                if (res.ok) {
+                    alert("Ride Accepted!");
+                    document.getElementById(`ride-${rideId}`).remove();
                 }
-
-                const titleInput = document.querySelector('input[name="title"]');
-                const contentInput = document.querySelector('textarea[name="content"]');
-
-                if (!titleInput || !contentInput) {
-                    alert('Form elements not found!');
-                    return;
-                }
-
-                const title = titleInput.value.trim();
-                const content = contentInput.value.trim();
-
-                if (!title) {
-                    alert('Please enter a title');
-                    return;
-                }
-
-                if (!content) {
-                    alert('Please enter content');
-                    return;
-                }
-
-                console.log('Creating post:', { title, content });
-
-                try {
-                    const response = await fetch('/api/forum/create', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`
-                        },
-                        body: JSON.stringify({
-                            title: title,
-                            content: content
-                        })
-                    });
-
-                    const data = await response.json();
-                    console.log('Post creation response:', data);
-
-                    if (response.ok) {
-                        alert('Post created successfully!');
-                        // Close modal
-                        const modal = bootstrap.Modal.getInstance(document.getElementById('modalId'));
-                        if (modal) modal.hide();
-
-                        // Clear form
-                        titleInput.value = '';
-                        contentInput.value = '';
-
-                        // Reload posts
-                        await loadForumPosts();
-                    } else {
-                        alert('Error: ' + (data.error || 'Unknown error occurred'));
-                    }
-                } catch (error) {
-                    console.error('Error creating post:', error);
-                    alert('Network error. Please check if server is running.');
-                }
-            }
-
-            // Delete post function
-            async function deletePost(postId) {
-                if (!confirm('Are you sure you want to delete this post?')) {
-                    return;
-                }
-
-                const token = localStorage.getItem('token');
-                if (!token) {
-                    alert('Please login to delete posts');
-                    return;
-                }
-
-                try {
-                    const response = await fetch(`/api/forum/posts/${postId}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'Authorization': `Bearer ${token}`
-                        }
-                    });
-
-                    const data = await response.json();
-
-                    if (response.ok) {
-                        alert('Post deleted successfully!');
-                        await loadForumPosts();
-                    } else {
-                        alert('Error: ' + (data.error || 'Unknown error occurred'));
-                    }
-                } catch (error) {
-                    console.error('Error deleting post:', error);
-                    alert('Network error. Please try again.');
-                }
-            }
-
-            // Add comment function
-            async function addComment(postId) {
-                const token = localStorage.getItem('token');
-                if (!token) {
-                    alert('Please login to comment');
-                    return;
-                }
-
-                const commentInput = document.querySelector(`.comment-input[data-post-id="${postId}"]`);
-                if (!commentInput) {
-                    alert('Comment input not found');
-                    return;
-                }
-
-                const content = commentInput.value.trim();
-                if (!content) {
-                    alert('Please enter a comment');
-                    return;
-                }
-
-                try {
-                    const response = await fetch(`/api/forum/posts/${postId}/comments`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`
-                        },
-                        body: JSON.stringify({ content })
-                    });
-
-                    const data = await response.json();
-
-                    if (response.ok) {
-                        commentInput.value = '';
-                        await loadForumPosts();
-                    } else {
-                        alert('Error: ' + (data.error || 'Unknown error occurred'));
-                    }
-                } catch (error) {
-                    console.error('Error adding comment:', error);
-                    alert('Network error. Please try again.');
-                }
-            }
-
-            // Delete comment function
-            async function deleteComment(commentId) {
-                if (!confirm('Are you sure you want to delete this comment?')) {
-                    return;
-                }
-
-                const token = localStorage.getItem('token');
-                if (!token) {
-                    alert('Please login to delete comments');
-                    return;
-                }
-
-                try {
-                    const response = await fetch(`/api/forum/comments/${commentId}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'Authorization': `Bearer ${token}`
-                        }
-                    });
-
-                    const data = await response.json();
-
-                    if (response.ok) {
-                        alert('Comment deleted successfully!');
-                        await loadForumPosts();
-                    } else {
-                        alert('Error: ' + (data.error || 'Unknown error occurred'));
-                    }
-                } catch (error) {
-                    console.error('Error deleting comment:', error);
-                    alert('Network error. Please try again.');
-                }
-            }
-        </script>
+            } catch (e) { console.error(e); }
+        }
+    </script>
 </body>
 
 </html>
