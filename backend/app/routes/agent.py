@@ -25,7 +25,7 @@ def chat():
         reply = "🛡️ SAFETY FIRST:\nAll UNIBEN Mobility drivers are verified students/staff. We track every ride in real-time for your security."
 
     elif "hello" in user_msg or "hi" in user_msg or "hey" in user_msg:
-        reply = "👋 Hello! I am the UNIBEN Assistant. Ask me about prices, locations, or safety!"
+        reply = "👋 Hello! I am Emmamic your Mobility Assistant . Ask me about prices, locations, or safety!"
 
     elif "thank" in user_msg:
         reply = "You're welcome! Safe travels. 🚕"

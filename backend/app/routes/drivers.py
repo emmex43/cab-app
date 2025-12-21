@@ -15,11 +15,11 @@ def get_driver_profile():
         driver = Driver.query.filter_by(user_id=user_id).first()
         if not driver:
             return jsonify({'error': 'Driver profile not found'}), 404
+
         # ... construct profile_data ...
         profile_data = {
             'driver_id': driver.driver_id,
             'fullname': driver.user.fullname,
-            # ... add other fields
         }
         return jsonify({'profile': profile_data}), 200
     except Exception as e:
@@ -29,8 +29,7 @@ def get_driver_profile():
 @drivers_bp.route('/available-rides', methods=['GET'])
 @jwt_required()
 def get_available_rides():
-    # ... (Keep existing available rides code) ...
-    return jsonify({'available_rides': []}), 200  # Placeholder
+    return jsonify({'available_rides': []}), 200
 
 
 @drivers_bp.route('/accept-ride/<int:ride_id>', methods=['POST'])

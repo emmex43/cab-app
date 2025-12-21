@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app import db, socketio
 from app.models import ForumPost, Driver, User, Comment
-from datetime import datetime, timedelta  # <--- IMPORT TIMEDELTA
+from datetime import datetime, timedelta
 
 forum_bp = Blueprint('forum', __name__)
 
@@ -16,7 +16,7 @@ def to_nigeria_time(utc_dt):
     nigeria_dt = utc_dt + timedelta(hours=1)
     return nigeria_dt.strftime("%Y-%m-%d %H:%M")
 
-# --- 1. GET ALL POSTS ---
+#  GET ALL POSTS
 
 
 @forum_bp.route('/posts', methods=['GET'])
@@ -39,7 +39,7 @@ def get_posts():
                     'content': comment.content,
                     'author_name': comment_user.fullname if comment_user else "Unknown",
                     'author_is_driver': comment_user.is_driver if comment_user else False,
-                    # <--- USE HELPER
+                    #  USE HELPER
                     'created_at': to_nigeria_time(comment.created_at)
                 })
 
@@ -61,7 +61,7 @@ def get_posts():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# --- 2. CREATE POST ---
+#  CREATE POST
 
 
 @forum_bp.route('/create', methods=['POST'])
@@ -106,7 +106,7 @@ def create_post():
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
 
-# --- 3. DELETE POST ---
+#  DELETE POST
 
 
 @forum_bp.route('/posts/<int:post_id>', methods=['DELETE'])
@@ -136,7 +136,7 @@ def delete_post(post_id):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# --- 4. ADD COMMENT ---
+# ADD COMMENT
 
 
 @forum_bp.route('/posts/<int:post_id>/comments', methods=['POST'])
@@ -169,7 +169,7 @@ def add_comment(post_id):
             'id': comment.id,
             'content': comment.content,
             'author_name': user.fullname,
-            # <--- USE HELPER
+            #  USE HELPER
             'created_at': to_nigeria_time(comment.created_at)
         })
 
@@ -179,7 +179,7 @@ def add_comment(post_id):
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
 
-# --- 5. DELETE COMMENT ---
+# DELETE COMMENT
 
 
 @forum_bp.route('/comments/<int:comment_id>', methods=['DELETE'])

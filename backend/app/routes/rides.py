@@ -50,7 +50,6 @@ def book_ride():
         db.session.add(ride)
         db.session.commit()
 
-        # --- TIME FIX ---
         # Get UTC time now and add 1 hour
         nigeria_time = datetime.utcnow() + timedelta(hours=1)
         formatted_time = nigeria_time.strftime("%H:%M")
@@ -64,7 +63,7 @@ def book_ride():
             'destination': destination,
             'price': price,
             'type': ride_type,
-            'time': formatted_time  # <--- Send Nigerian Time
+            'time': formatted_time  # Send Nigerian Time
         })
 
         return jsonify({
@@ -108,7 +107,7 @@ def get_my_rides():
                 'pickup_location': ride.pickup_location,
                 'price': ride.price,
                 'status': ride.status,
-                'created_at': local_time.isoformat(),  # <--- Nigeria Time
+                'created_at': local_time.isoformat(),  # Nigeria Time
                 'driver_name': driver_name
             }
             rides_data.append(ride_data)
