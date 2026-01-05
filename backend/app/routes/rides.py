@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app import db, socketio
 from app.models import Ride, User, Driver
-from datetime import datetime, timedelta  # <--- IMPORT
+from datetime import datetime, timedelta
 
 rides_bp = Blueprint('rides', __name__)
 
@@ -33,41 +33,55 @@ def book_ride():
         if not destination:
             return jsonify({'error': 'destination is required'}), 400
 
+        # --- PRICE & STATUS LOGIC ---
+        price = 200          # Default base price
+        status = 'pending'   # Default status (waits for driver)
+
         if ride_type == 'Shuttle':
             price = SHUTTLE_PRICES.get(destination, 200)
-        else:
-            price = 200
+            status = 'confirmed'  # Shuttles are auto-confirmed tickets
 
+        elif ride_type == 'Travel':
+            # For Travel, we can set a placeholder price or parse it later
+            # (Since payment isn't integrated yet, we just record the booking)
+            price = 15000 if 'Lagos' in destination else 20000
+            status = 'confirmed'  # Travel seats are auto-confirmed
+
+        # Create the Ride Record
         ride = Ride(
             user_id=user_id,
             ride_type=ride_type,
             destination=destination,
             pickup_location=pickup_location,
             price=price,
-            status='pending'
+            status=status
         )
 
         db.session.add(ride)
         db.session.commit()
 
-        # Get UTC time now and add 1 hour
-        nigeria_time = datetime.utcnow() + timedelta(hours=1)
-        formatted_time = nigeria_time.strftime("%H:%M")
+        # --- SOCKET ALERT (Only for Cabs) ---
+        # We only notify drivers if it is a 'Cab' request.
+        # Shuttles and Travel are just ticket bookings.
+        if ride_type == 'Cab':
+            # Get UTC time now and add 1 hour for Nigeria Time
+            nigeria_time = datetime.utcnow() + timedelta(hours=1)
+            formatted_time = nigeria_time.strftime("%H:%M")
 
-        student = User.query.get(user_id)
+            student = User.query.get(user_id)
 
-        socketio.emit('new_ride_available', {
-            'ride_id': ride.id,
-            'student_name': student.fullname,
-            'pickup': pickup_location,
-            'destination': destination,
-            'price': price,
-            'type': ride_type,
-            'time': formatted_time  # Send Nigerian Time
-        })
+            socketio.emit('new_ride_available', {
+                'ride_id': ride.id,
+                'student_name': student.fullname,
+                'pickup': pickup_location,
+                'destination': destination,
+                'price': price,
+                'type': ride_type,
+                'time': formatted_time
+            })
 
         return jsonify({
-            'message': 'Ride booked successfully',
+            'message': f'{ride_type} booked successfully',
             'ride': {
                 'id': ride.id,
                 'ride_type': ride.ride_type,
@@ -88,6 +102,7 @@ def book_ride():
 def get_my_rides():
     try:
         user_id = int(get_jwt_identity())
+        # Sort by newest first
         rides = Ride.query.filter_by(user_id=user_id).order_by(
             Ride.created_at.desc()).all()
 
@@ -107,7 +122,7 @@ def get_my_rides():
                 'pickup_location': ride.pickup_location,
                 'price': ride.price,
                 'status': ride.status,
-                'created_at': local_time.isoformat(),  # Nigeria Time
+                'created_at': local_time.isoformat(),
                 'driver_name': driver_name
             }
             rides_data.append(ride_data)
