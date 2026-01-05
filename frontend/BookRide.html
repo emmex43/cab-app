@@ -77,6 +77,14 @@
         <ul class="navbar-nav ms-auto">
           <li class="nav-item"><a class="nav-link text-white" href="Home.html">Home</a></li>
           <li class="nav-item"><a class="nav-link text-white" href="BookRide.html">Book Ride</a></li>
+
+          <li class="nav-item">
+            <a class="nav-link text-warning fw-bold" href="#" data-bs-toggle="modal" data-bs-target="#historyModal"
+              onclick="loadRideHistory()">
+              <i class="fas fa-ticket-alt"></i> My Tickets
+            </a>
+          </li>
+
           <li class="nav-item"><a class="nav-link text-white" href="studentforum.html">Forum</a></li>
           <li class="nav-item"><a class="nav-link text-white" href="driverhub.html">Driver's Hub</a></li>
         </ul>
@@ -102,7 +110,8 @@
       </div>
 
       <div class="row g-4 justify-content-center">
-        <div class="col-md-5">
+
+        <div class="col-md-4">
           <div class="card border-0 shadow-sm h-100" style="border-radius: 20px;">
             <div class="card-body p-4">
               <div class="d-flex align-items-center mb-3">
@@ -111,31 +120,26 @@
                   <i class="fas fa-taxi fa-lg"></i>
                 </div>
                 <div>
-                  <h5 class="fw-bold mb-0">Book Private Cab</h5>
-                  <small class="text-muted">Direct ride to any location</small>
+                  <h5 class="fw-bold mb-0">Campus Cab</h5><small class="text-muted">Instant Pickup</small>
                 </div>
               </div>
-
               <form id="cabForm">
                 <div class="form-floating mb-3">
-                  <input type="text" class="form-control" id="pickupLocation" placeholder="Current Location" required>
-                  <label for="pickupLocation">Pickup Location</label>
+                  <input type="text" class="form-control" id="pickupLocation" placeholder="Loc" required>
+                  <label>Pickup Location</label>
                 </div>
-
                 <div class="form-floating mb-4">
-                  <input type="text" class="form-control" id="dropoffLocation" placeholder="Where to?" required>
-                  <label for="dropoffLocation">Destination</label>
+                  <input type="text" class="form-control" id="dropoffLocation" placeholder="Dest" required>
+                  <label>Destination</label>
                 </div>
-
-                <button class="w-100 btn btn-lg btn-purple rounded-pill" type="submit">
-                  Request Cab <i class="fas fa-arrow-right ms-2"></i>
-                </button>
+                <button class="w-100 btn btn-lg btn-purple rounded-pill" type="submit">Request Cab <i
+                    class="fas fa-arrow-right ms-2"></i></button>
               </form>
             </div>
           </div>
         </div>
 
-        <div class="col-md-5">
+        <div class="col-md-4">
           <div class="card border-0 shadow-sm h-100" style="border-radius: 20px;">
             <div class="card-body p-4">
               <div class="d-flex align-items-center mb-3">
@@ -144,26 +148,18 @@
                   <i class="fas fa-bus fa-lg"></i>
                 </div>
                 <div>
-                  <h5 class="fw-bold mb-0">Book Shuttle</h5>
-                  <small class="text-muted">Fixed Campus Routes</small>
+                  <h5 class="fw-bold mb-0">Campus Shuttle</h5><small class="text-muted">Fixed Routes</small>
                 </div>
               </div>
-
               <form id="shuttleForm">
                 <div class="mb-3">
-                  <label class="form-label text-muted small ms-1">Select Route</label>
-                  <select class="form-select form-select-lg" name="Destination" id="Destination" required
-                    style="border-radius: 10px;">
-                    <option selected disabled value="">Choose Destination...</option>
-                    <option value="Main Gate/Small Gate">Back Gate to Main Gate (₦100)</option>
-                    <option value="New Benin(NB)">Small Gate to New Benin (₦300)</option>
-                    <option value="Ring Road(RR)">Small Gate to Ring Road (₦300)</option>
-                    <option value="Back Gate">Main Gate to Back Gate (₦100)</option>
+                  <select class="form-select form-select-lg" id="Destination" required style="border-radius: 10px;">
+                    <option selected disabled value="">Select Route...</option>
+                    <option value="Main Gate">Main Gate/Small Gate(₦100)</option>
+                    <option value="New Benin">New Benin (₦300)</option>
+                    <option value="Ring Road">Ring Road (₦300)</option>
+                    <option value="Back Gate">Back Gate (₦100)</option>
                   </select>
-                </div>
-                <div class="alert alert-light border rounded-3 p-3 mb-4">
-                  <small class="text-muted"><i class="fas fa-info-circle me-1"></i> Pickup Point:</small>
-                  <div class="fw-bold">UNIBEN Campus Terminals</div>
                 </div>
                 <button class="w-100 btn btn-lg btn-outline-warning text-dark fw-bold rounded-pill" type="submit">Get
                   Ticket</button>
@@ -171,15 +167,45 @@
             </div>
           </div>
         </div>
+
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm h-100" style="border-radius: 20px;">
+            <div class="card-body p-4">
+              <div class="d-flex align-items-center mb-3">
+                <div class="bg-success text-white rounded-circle d-flex justify-content-center align-items-center me-3"
+                  style="width: 50px; height: 50px;">
+                  <i class="fas fa-route fa-lg"></i>
+                </div>
+                <div>
+                  <h5 class="fw-bold mb-0">Inter-State</h5><small class="text-muted">Lagos, Abuja...</small>
+                </div>
+              </div>
+              <form id="travelForm">
+                <div class="mb-2">
+                  <select class="form-select" id="travelDest" required>
+                    <option selected disabled value="">Select City...</option>
+                    <option value="Lagos">Lagos (₦15,000)</option>
+                    <option value="Abuja">Abuja (₦20,000)</option>
+                    <option value="Port Harcourt">Port Harcourt (₦20,000)</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <input type="date" class="form-control" id="travelDate" required>
+                </div>
+                <button class="w-100 btn btn-lg btn-success text-white fw-bold rounded-pill" type="submit">Book
+                  Seat</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
 
   <div id="chat-widget" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
     <button onclick="toggleChat()" class="btn btn-purple rounded-circle shadow-lg"
-      style="width: 60px; height: 60px; font-size: 24px; border: 2px solid white;">
-      <i class="fas fa-robot"></i>
-    </button>
+      style="width: 60px; height: 60px; font-size: 24px; border: 2px solid white;"><i class="fas fa-robot"></i></button>
     <div id="chat-window" class="card shadow-lg mb-3"
       style="display: none; width: 300px; height: 400px; position: absolute; bottom: 70px; right: 0;">
       <div class="card-header bg-purple text-white d-flex justify-content-between align-items-center">
@@ -189,9 +215,44 @@
       <div id="chat-messages" class="card-body bg-light" style="overflow-y: auto; height: 290px; padding: 10px;"></div>
       <div class="card-footer p-2">
         <div class="input-group">
-          <input type="text" id="chat-input" class="form-control form-control-sm" placeholder="Type a question..."
+          <input type="text" id="chat-input" class="form-control form-control-sm" placeholder="Ask about prices..."
             onkeypress="handleEnter(event)">
           <button onclick="sendMessage()" class="btn btn-sm btn-purple"><i class="fas fa-paper-plane"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="timeoutModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content text-center p-4" style="border-radius: 20px;">
+        <div class="modal-body">
+          <div class="mb-3"><i class="fas fa-hourglass-end text-warning" style="font-size: 3rem;"></i></div>
+          <h4 class="fw-bold mb-2">No Drivers Found</h4>
+          <p class="text-muted">Drivers are busy. Try again or chat with us.</p>
+          <div class="d-grid gap-2 mt-4">
+            <button class="btn btn-purple" onclick="retryBooking()">Try Again</button>
+            <button class="btn btn-outline-secondary" onclick="contactSupport()">Chat Support</button>
+            <button class="btn btn-link text-muted" data-bs-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="historyModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header bg-purple text-white">
+          <h5 class="modal-title"><i class="fas fa-history"></i> My Trips & Tickets</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body bg-light">
+          <div id="history-loading" class="text-center py-4">
+            <div class="spinner-border text-purple" role="status"></div>
+            <p class="mt-2 text-muted">Loading your tickets...</p>
+          </div>
+          <div id="history-list" class="d-grid gap-3"></div>
         </div>
       </div>
     </div>
@@ -201,141 +262,193 @@
 
   <script>
     const socket = io();
-    let map, routingControl;
 
-    // Default coords (UNIBEN)
+    // VISUAL TIMER LOGIC
+    let searchTimer = null;
+    let timeLeft = 60;
+
+    function startVisualTimer() {
+      timeLeft = 60;
+      if (searchTimer) clearInterval(searchTimer);
+      updateTimerDisplay(timeLeft);
+      searchTimer = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay(timeLeft);
+        if (timeLeft <= 0) { clearInterval(searchTimer); handleNoDriverFound(); }
+      }, 1000);
+    }
+    function updateTimerDisplay(seconds) {
+      const d = document.getElementById('timer-countdown');
+      if (d) d.innerText = seconds;
+    }
+    function stopVisualTimer() { if (searchTimer) clearInterval(searchTimer); }
+    function handleNoDriverFound() {
+      document.getElementById('booking-status').style.display = 'none';
+      new bootstrap.Modal(document.getElementById('timeoutModal')).show();
+    }
+    function retryBooking() {
+      bootstrap.Modal.getInstance(document.getElementById('timeoutModal')).hide();
+      alert("Please click 'Request Cab' to try again.");
+    }
+    function contactSupport() {
+      bootstrap.Modal.getInstance(document.getElementById('timeoutModal')).hide();
+      toggleChat();
+      setTimeout(() => {
+        document.getElementById('chat-input').value = "I can't find a driver.";
+        sendMessage();
+      }, 500);
+    }
+
+    // MAP INIT
+    let map;
     const PICKUP = { lat: 6.342, lng: 5.618 };
     const DEST = { lat: 6.335, lng: 5.620 };
 
     function initMap() {
       map = L.map('map').setView([6.3392, 5.6176], 14);
-
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap'
-      }).addTo(map);
-
-      // Visual Route only (Main Gate -> Hall 2)
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
       L.Routing.control({
         waypoints: [L.latLng(PICKUP.lat, PICKUP.lng), L.latLng(DEST.lat, DEST.lng)],
-        routeWhileDragging: false, show: false, addWaypoints: false, draggableWaypoints: false,
-        lineOptions: { styles: [{ color: '#8C1C64', opacity: 0.7, weight: 5 }] }
+        show: false, lineOptions: { styles: [{ color: '#8C1C64', opacity: 0.7, weight: 5 }] }
       }).addTo(map);
-
-      // Default Link
       updateGoogleLink("University of Benin", "Hall 2, Benin City");
     }
-
-    // UPDATE BUTTON DYNAMICALLY
     function updateGoogleLink(start, end) {
-      // Creates a real Google Maps Directions Link
-      const url = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(start)}&destination=${encodeURIComponent(end)}&travelmode=driving`;
-      document.getElementById('nav-btn').href = url;
+      document.getElementById('nav-btn').href = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(start)}&destination=${encodeURIComponent(end)}&travelmode=driving`;
     }
-
     document.addEventListener('DOMContentLoaded', function () {
       initMap();
       if (!localStorage.getItem('token')) { alert('Please login!'); window.location.href = 'Login.html'; }
     });
 
     socket.on('ride_accepted', (data) => {
-      console.log("🔔 Server sent a ride update:", data);
-
+      stopVisualTimer();
       if ('speechSynthesis' in window) {
-        const utterance = new SpeechSynthesisUtterance(`Driver Found! ${data.driver_name} is coming.`);
-        utterance.rate = 1.1;
-        utterance.pitch = 1.2;
-        window.speechSynthesis.speak(utterance);
+        const u = new SpeechSynthesisUtterance(`Driver Found! ${data.driver_name} is coming.`);
+        window.speechSynthesis.speak(u);
       }
-      alert(`✅ DRIVER FOUND!\n\nDriver ${data.driver_name} has accepted your ride!\nVehicle: ${data.vehicle}`);
-
-      const status = document.getElementById('booking-status');
-      if (status) {
-        status.style.display = 'block';
-        status.className = 'alert alert-success text-center fw-bold shadow';
-        status.innerHTML = `
-            <h4 class="fw-bold mb-3"><i class="fas fa-check-circle text-success"></i> Driver Found!</h4>
-            
-            <div class="text-start bg-white p-3 rounded mt-2 border">
-                <p class="mb-2 fs-5">Driver: <strong>${data.driver_name}</strong></p>
-                <hr>
-                <p class="mb-1"><strong>Vehicle:</strong> ${data.vehicle}</p>
-                <p class="mb-1"><strong>Description:</strong> ${data.vehicle_desc}</p>
-                <p class="mb-0 text-danger"><strong>ID Number:</strong> ${data.vehicle_id}</p>
-            </div>
-            
-            <div class="mt-3">
-                <div class="spinner-grow text-warning spinner-grow-sm"></div>
-                <small class="text-muted">Driver is approaching...</small>
-            </div>
-          `;
-      }
+      alert(`✅ DRIVER FOUND!\nDriver: ${data.driver_name}\nCar: ${data.vehicle}`);
+      document.getElementById('booking-status').innerHTML = `<div class="alert alert-success">Driver <strong>${data.driver_name}</strong> is coming!</div>`;
     });
 
-    // CAB FORM - Updates Google Link on Submit
+    // --- FORM HANDLERS ---
+
+    // 1. CAB FORM
     document.getElementById('cabForm').addEventListener('submit', async function (e) {
       e.preventDefault();
       const token = localStorage.getItem('token');
       const pickup = document.getElementById('pickupLocation').value;
       const dest = document.getElementById('dropoffLocation').value;
-
-      if (!pickup || !dest) { alert('Please enter locations'); return; }
-
-      // 1. UPDATE THE BUTTON with User's Inputs
       updateGoogleLink(pickup, dest);
-
-      // 2. Send to Backend
-      try {
-        const response = await fetch('/api/rides/book', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-          body: JSON.stringify({ ride_type: 'Cab', pickup_location: pickup, destination: dest })
-        });
-
-        if (response.ok) {
-          // Success Alert
-          alert("Request Sent! Check the map button for directions.");
-
-          // Clear Inputs
-          document.getElementById('pickupLocation').value = '';
-          document.getElementById('dropoffLocation').value = '';
-
-          // SHOW THE SPINNER
-          const status = document.getElementById('booking-status');
-          status.style.display = 'block';
-          status.className = 'alert alert-info text-center fw-bold shadow-sm';
-          status.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Finding drivers near <strong>${pickup}</strong>...`;
-        }
-      } catch (e) { console.error(e); }
-    });
-
-    // SHUTTLE FORM
-    document.getElementById('shuttleForm').addEventListener('submit', async function (e) {
-      e.preventDefault();
-      const token = localStorage.getItem('token');
-      const destinationSelect = document.getElementById('Destination');
-      const dest = destinationSelect.value;
-
-      if (!dest) return alert("Select destination");
 
       try {
         const res = await fetch('/api/rides/book', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-          body: JSON.stringify({ ride_type: 'Shuttle', destination: dest, pickup_location: 'UNIBEN Campus' })
+          method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ ride_type: 'Cab', pickup_location: pickup, destination: dest })
         });
-
         if (res.ok) {
-          // Clear Input
-          destinationSelect.value = '';
-
-          // SHOW THE SPINNER
           const status = document.getElementById('booking-status');
           status.style.display = 'block';
           status.className = 'alert alert-info text-center fw-bold shadow-sm';
-          status.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Processing Shuttle Ticket to <strong>${dest}</strong>...`;
+          status.innerHTML = `<div class="mb-2"><i class="fas fa-spinner fa-spin fa-2x"></i></div><div>Finding drivers...</div><div class="mt-2 small text-muted">Timeout in <span id="timer-countdown" class="text-danger">60</span>s</div>`;
+          startVisualTimer();
         }
       } catch (e) { console.error(e); }
     });
+
+    // 2. SHUTTLE FORM
+    document.getElementById('shuttleForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const token = localStorage.getItem('token');
+      const dest = document.getElementById('Destination').value;
+
+      try {
+        const res = await fetch('/api/rides/book', {
+          method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ ride_type: 'Shuttle', destination: dest, pickup_location: 'UNIBEN Campus' })
+        });
+        if (res.ok) {
+          alert("Shuttle Ticket Booked! Check 'My Tickets' for details.");
+          new bootstrap.Modal(document.getElementById('historyModal')).show();
+          loadRideHistory();
+        }
+      } catch (e) { console.error(e); }
+    });
+
+    // 3. TRAVEL FORM
+    document.getElementById('travelForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const token = localStorage.getItem('token');
+      const dest = document.getElementById('travelDest').value;
+      const date = document.getElementById('travelDate').value;
+
+      try {
+        const res = await fetch('/api/rides/book', {
+          method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ ride_type: 'Travel', destination: dest + " (" + date + ")", pickup_location: 'Main Gate Terminal' })
+        });
+        if (res.ok) {
+          alert(`✅ Travel Confirmed!\nPlease check 'My Tickets' for your seat.`);
+          new bootstrap.Modal(document.getElementById('historyModal')).show();
+          loadRideHistory();
+        }
+      } catch (e) { console.error(e); }
+    });
+
+    // NEW: LOAD TICKETS FUNCTION
+    async function loadRideHistory() {
+      const token = localStorage.getItem('token');
+      const listContainer = document.getElementById('history-list');
+      const loader = document.getElementById('history-loading');
+
+      listContainer.innerHTML = '';
+      loader.style.display = 'block';
+
+      try {
+        const res = await fetch('/api/rides/my-rides', {
+          method: 'GET',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+
+        loader.style.display = 'none';
+
+        if (!data.rides || data.rides.length === 0) {
+          listContainer.innerHTML = `<div class="text-center text-muted p-4">No trips found yet.</div>`;
+          return;
+        }
+
+        data.rides.forEach(ride => {
+          let icon = 'taxi';
+          let color = 'primary';
+
+          if (ride.ride_type === 'Shuttle') { icon = 'bus'; color = 'warning text-dark'; }
+          if (ride.ride_type === 'Travel') { icon = 'plane'; color = 'success'; }
+
+          const card = document.createElement('div');
+          card.className = 'card border-0 shadow-sm';
+          card.innerHTML = `
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-${color}"><i class="fas fa-${icon}"></i> ${ride.ride_type}</span>
+                            <small class="text-muted">${new Date(ride.created_at).toLocaleString()}</small>
+                        </div>
+                        <h6 class="fw-bold mb-1">${ride.destination}</h6>
+                        <p class="text-muted small mb-2">From: ${ride.pickup_location}</p>
+                        <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+                            <span class="fw-bold text-success">₦${ride.price}</span>
+                            <span class="badge ${ride.status === 'confirmed' ? 'bg-success' : 'bg-secondary'}">${ride.status.toUpperCase()}</span>
+                        </div>
+                        ${ride.status === 'confirmed' ? `<div class="mt-2 text-center bg-light p-1 rounded border border-dashed"><small class="text-muted fw-bold">TICKET ID: #${ride.id}</small></div>` : ''}
+                    </div>
+                `;
+          listContainer.appendChild(card);
+        });
+      } catch (e) {
+        loader.style.display = 'none';
+        listContainer.innerHTML = `<div class="text-danger text-center">Failed to load history.</div>`;
+      }
+    }
 
     // CHATBOT
     function toggleChat() { document.getElementById('chat-window').style.display = document.getElementById('chat-window').style.display === 'none' ? 'block' : 'none'; }
@@ -350,7 +463,9 @@
       try {
         const res = await fetch('/api/agent/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message }) });
         const d = await res.json();
-        document.getElementById('chat-messages').lastChild.innerText = d.reply;
+        const chatBox = document.getElementById('chat-messages');
+        if (chatBox.lastChild.innerText === '...') chatBox.removeChild(chatBox.lastChild);
+        addMessage(d.response || d.reply || "Error", 'bot');
       } catch (e) { }
     }
     function addMessage(t, s) {
