@@ -3,8 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from flask_socketio import SocketIO
-from flask_admin import Admin  # [NEW] Import Admin
-from flask_admin.contrib.sqla import ModelView  # [NEW] Import ModelView
 import os
 from config import Config
 
@@ -12,7 +10,7 @@ from config import Config
 db = SQLAlchemy()
 jwt = JWTManager()
 socketio = SocketIO()
-admin = Admin(name='UNIBEN Mobility Admin')
+
 def create_app():
     app = Flask(__name__, 
                 template_folder='../../frontend',
@@ -23,23 +21,8 @@ def create_app():
     db.init_app(app)
     jwt.init_app(app)
     socketio.init_app(app, cors_allowed_origins="*")
-    admin.init_app(app)  # [NEW] Connect Admin to App
     CORS(app)
     
-    # [NEW] Register Admin Views inside App Context
-    with app.app_context():
-        # Import models here to avoid circular import errors
-        from app.models import User, Driver, Ride, ForumPost 
-        
-        # Add views to the Admin Panel
-        admin.add_view(ModelView(User, db.session))
-        admin.add_view(ModelView(Driver, db.session))
-        admin.add_view(ModelView(Ride, db.session))
-        admin.add_view(ModelView(ForumPost, db.session))
-
-        # Create tables if they don't exist
-        db.create_all()
-
     # Create upload directories
     os.makedirs(os.path.join(app.config['UPLOAD_FOLDER'], 'vehicles'), exist_ok=True)
     os.makedirs(os.path.join(app.config['UPLOAD_FOLDER'], 'documents'), exist_ok=True)
