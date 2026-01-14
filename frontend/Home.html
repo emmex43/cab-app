@@ -12,16 +12,54 @@
     <style>
         /* The css for only the home page */
         section {
-            background-image: linear-gradient(rgba(167, 167, 167, 0.6)), url("/frontend/assets/images/front.jpg");
-            background-size: cover;
-            background-position: center;
+            text-align: center;
             width: 100%;
+            position: relative;
             height: 380px;
-            padding: 11%;
+            overflow: hidden;
+            color: white;
+            padding: 2px;
+        }
+
+        .slideshow {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+
+        .slideshow img {
+            position: inherit;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            text-align: center;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        .slideshow img.active {
+            opacity: 1;
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(155, 154, 154, 0.6);
+            /* dark overlay */
+            z-index: 2;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            text-align: center;
+            top: 50%;
+            transform: translateY(-50%);
         }
 
         .load {
@@ -76,19 +114,26 @@
     </nav id="home"><br><br>
 
     <!-- The Display Section -->
-    <section>
-        <br>
-        <h1 class="h1 mb-3 fw-bold" style="color: #8C1C64;">UNIBEN Mobility Suite</h1>
-        <div class="intro" style="margin-bottom: 15%; padding: 5px;">
-            <p class="h5 mb-2 fw-normal" style="padding-left: 20px; padding-right: 20px;">Safe, reliable and affordable
-                transportation for</p>
-            <p class="h5 mb-2 fw-normal" style="padding-left: 125px; padding-right: 125px;">transportation for</p>
-            <p class="h5 mb-2 fw-normal" style="padding-left: 125px; padding-right: 125px;">UNIBEN students</p>
+    <!-- ================= HERO SECTION ================= -->
+    <section class="hero">
+        <div class="slideshow">
+            <img src="../assets/images/frontedited.jpg" class="active" />
+            <img src="../assets/images/grind.png" />
+            <img src="../assets/images/lowkey.jpg" />
+            <img src="../assets/images/open.jpg" />
         </div>
-        <div class="buttons" style="margin-top: -5%;">
-            <a href="BookRide.html" class="btn btn-purple ms-lg-3">Book Ride</a>
-            <a href="Login.html" class="btn btn-yellow ms-lg-3">Student Login</a>
-        </div>
+        <center class="hero-content">
+            <h1 class="h1 mb-2 fw-bold" style="color:#8C1C64;">UNIBEN Mobility Suite</h1>
+            <div class="intro" style="margin-bottom: 15%; border-radius: 5px; padding: 5px;">
+                <p class="h6 mb-2 fw-normal text-white">Safe, reliable and affordable</p>
+                <p class="h6 mb-2 fw-normal text-white">transportation for</p>
+                <p class="h6 mb-2 fw-normal text-white">UNIBEN students</p>
+            </div>
+            <div class="buttons" style="margin-top: -15%;">
+                <a id="bookRideBtn" href="BookRide.html" class="btn btn-purple me-2">Book Ride</a>
+                <a href="Login.html" class="btn btn-yellow">Student Login</a>
+            </div>
+        </center>
     </section>
 
     <!-- The Contents Section -->
@@ -174,7 +219,21 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
         integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
         crossorigin="anonymous"></script>
+
+    <!-- JS function for slideshow -->
     <script>
+        const slides = document.querySelectorAll(".slideshow img");
+        let index = 0;
+
+        setInterval(() => {
+            slides[index].classList.remove("active");
+            index = (index + 1) % slides.length;
+            slides[index].classList.add("active");
+        }, 3000);
+    </script>
+
+    <script>
+
         // Check if user is logged in and update UI accordingly
         window.addEventListener('DOMContentLoaded', function () {
             const token = localStorage.getItem('token');
