@@ -350,7 +350,7 @@
           const status = document.getElementById('booking-status');
           status.style.display = 'block';
           status.className = 'alert alert-info text-center fw-bold shadow-sm';
-          status.innerHTML = `<div class="mb-2"><i class="fas fa-spinner fa-spin fa-2x"></i></div><div>Finding drivers...</div><div class="mt-2 small text-muted">Timeout in <span id="timer-countdown" class="text-danger">60</span>s</div>`;
+          status.innerHTML = `<div class="mb-2"><i class="fas fa-spinner fa-spin fa-2x"></i></div><div>Finding drivers near...</div><div class="mt-2 small text-muted">Timeout in <span id="timer-countdown" class="text-danger">60</span>s</div>`;
           startVisualTimer();
         }
       } catch (e) { console.error(e); }
@@ -470,9 +470,18 @@
     }
     function addMessage(t, s) {
       const d = document.createElement('div');
+      // 1. Outer container aligns the message left or right
       d.className = `mb-2 ${s === 'user' ? 'text-end' : 'text-start'}`;
-      d.innerHTML = `<span class="p-2 rounded ${s === 'user' ? 'bg-purple text-white' : 'bg-white border'}">${t}</span>`;
-      document.getElementById('chat-messages').appendChild(d);
+      // 2. Inner container styles the message bubble
+      d.innerHTML = `
+        <div class="d-inline-block p-2 rounded text-break text-start ${s === 'user' ? 'bg-purple text-white' : 'bg-white border'}" style="max-width: 85%;">
+            ${t}
+        </div>
+      `;
+      // 3. Append to chat window and scroll to bottom
+      const messagesContainer = document.getElementById('chat-messages');
+      messagesContainer.appendChild(d);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
   </script>
 </body>
