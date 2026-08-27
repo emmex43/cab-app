@@ -9,6 +9,16 @@
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css">
   <link rel="stylesheet" href="index.css">
+        <!-- Favicon -->
+    <link rel="icon" href="../assets/images/logo.png" type="image/png">
+        <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+
 
   <!-- This is the style for only the login page -->
   <style>
@@ -60,6 +70,35 @@
       border-top-left-radius: 0;
       border-top-right-radius: 0;
     }
+                /* Navbar Cursive Logo */
+        .tripuni-cursive-nav {
+            font-family: 'Dancing Script', cursive; /* You can change 'Pacifico' to 'Dancing Script' to test it */
+            font-size: 1.8rem; /* Cursive fonts need to be slightly larger to be readable */
+            color: #FFFFFF;
+            text-decoration: none;
+            line-height: 1;
+        }
+        .tripuni-cursive-nav span {
+            color: #FACC15; /* Yellow highlight for the 'Uni' part */
+        }
+
+        /* Hero Section Cursive Logo */
+        .tripuni-cursive-hero {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem; /* Make it huge! */
+            color: #FFFFFF;
+            margin-bottom: 0;
+            line-height: 1.2;
+            /* A soft, glowing drop-shadow to make it readable over the dark images */
+            text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.3), 
+            0px 0px 20px rgba(140, 28, 100, 0.6); /* Subtle purple glow */
+            /* Add a slight tilt for a fast, dynamic mobility feel */
+            /* transform: rotate(-2deg);  */
+            display: inline-block;
+        }
+            .tripuni-cursive-hero span {
+            color: #FACC15; /* Yellow highlight for the 'Uni' part */
+        }
   </style>
 
 </head>
@@ -70,9 +109,9 @@
   <main class="form-signin">
     <a href="Home.html" class="h6 mb-3 fw-normal" style="text-decoration: none;">Back to HomePage</a>
     <form action="" method="">
-      <img class="mb-4" src="assets/images/uniben.jpeg" alt="" width="60" height="60">
-      <h1 class="h3 mb-3 fw-bold">UNIBEN Mobility</h1>
-      <h2 class="h4 mb-2 fw-normal">Please Login</h2>
+      <img class="mb-4" src="../assets/images/logo.png" alt="" width="120" height="120">
+      <h3 class="tripuni-cursive-hero" style="font-size: 60px; margin: 0; line-height: 1;">Trip<span>Uni</span></h3>
+      <h2 class="h4 mb-2 fw-normal" style="margin-top: -20px;">Login Page</h2>
 
       <div class="form-floating">
         <input type="email" name="email" class="form-control" id="floatingInput" placeholder="name@example.com"
@@ -88,10 +127,8 @@
       <button class="w-100 btn btn-lg btn-purple" type="submit">Login</button>
       <p>Don't have an account? <a href="reg.html" style="color: #8C1C64;">Register Here</a></p>
       <p style="text-align: center; ">
-        <a href="mailto:emmexanimation@gmail.com" class="mt-5 mb-3 text-muted nav-link text-black"
-          style="text-decoration: none;">emmexanimation@gmail.com</a>
-        <a href="https//efemichael-712.web.app" class="mt-5 mb-3 text-muted nav-link text-black"> By Michael Efe © 2025
-        </a>
+        <a href="mailto:admintripuni@gmail.com" class="mt-5 mb-3 text-muted nav-link text-black"
+          style="text-decoration: none;">admintripuni@gmail.com</a>
       </p>
     </form>
   </main>
